@@ -21,6 +21,10 @@ func (*OpenAPI) Page(pageNum, pageSize int) entity.PageInfo {
 	return DatabaseConfigRepository.Page(pageNum, pageSize)
 }
 
+func (*OpenAPI) DeleteDatabaseConfig(id int64) {
+	DatabaseConfigRepository.DeleteById(id)
+}
+
 func (*OpenAPI) TestConnect(config entity.DatabaseConfig) (bool, error) {
 	return mysqlConn.MysqlTestConnect(config)
 }

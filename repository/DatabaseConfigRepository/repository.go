@@ -10,11 +10,16 @@ func Save(config *entity.DatabaseConfig) {
 	db.Save(config)
 }
 
-func FindById(id int) entity.DatabaseConfig {
+func FindById(id int64) entity.DatabaseConfig {
 	db := sqliteConn.GetDB()
 	e := entity.DatabaseConfig{}
 	db.Find(&e, id)
 	return e
+}
+
+func DeleteById(id int64) {
+	db := sqliteConn.GetDB()
+	db.Delete(&entity.DatabaseConfig{}, id)
 }
 
 func Page(pageNum, pageSize int) entity.PageInfo {

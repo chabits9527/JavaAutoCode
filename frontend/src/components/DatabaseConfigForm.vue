@@ -1,7 +1,7 @@
 <script setup>
 import {reactive, ref} from "vue";
 import {SaveDatabaseConfig, TestConnect} from "../../wailsjs/go/openAPI/OpenAPI.js";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
 
 const props = defineProps({
   editable: {
@@ -36,7 +36,7 @@ let testButtonLoading = ref(false);
 let testButtonSuccess = ref(false);
 const handleTest = () => {
   testButtonLoading.value = true;
-  TestConnect(data.DatabaseConfig).then(res => {
+  TestConnect(data.DatabaseConfig).then(() => {
     ElMessage({
       message: '连接成功',
       type: 'success',
@@ -45,8 +45,9 @@ const handleTest = () => {
     testButtonSuccess.value = true
     testButtonLoading.value = false
   }).catch(err => {
-    ElMessage({
-      message: '连接失败',
+    ElNotification({
+      title: '数据库连接失败',
+      message: err,
       type: 'error',
       duration: 5000
     })
@@ -68,21 +69,21 @@ const handleClose = () => {
   emits('closeDialog');
 }
 const handleSubmit = () => {
-  SaveDatabaseConfig(data.DatabaseConfig).then(res => {
+  SaveDatabaseConfig(data.DatabaseConfig).then(() => {
     ElMessage({
       message: '添加成功',
       type: 'success'
     })
     handleClose();
   }).catch(err => {
-    ElMessage({
-      message: '添加失败',
+    ElNotification({
+      title: '添加失败',
+      message: err,
       type: 'error',
       duration: 5000
     })
   })
 }
-
 
 
 </script>
@@ -132,23 +133,23 @@ const handleSubmit = () => {
         <span v-if="!editable">{{ data.DatabaseConfig.database }}</span>
         <el-input v-if="editable" v-model="data.DatabaseConfig.database" placeholder="请输入数据库名称"/>
       </el-form-item>
-      <el-form-item label="数据库连接参数">
-        <span v-if="!editable">{{ data.DatabaseConfig.params }}</span>
-        <el-input v-if="editable" v-model="data.DatabaseConfig.params" placeholder="请输入数据库连接参数"/>
-      </el-form-item>
+<!--      <el-form-item label="数据库连接参数">-->
+<!--        <span v-if="!editable">{{ data.DatabaseConfig.params }}</span>-->
+<!--        <el-input v-if="editable" v-model="data.DatabaseConfig.params" placeholder="请输入数据库连接参数"/>-->
+<!--      </el-form-item>-->
     </el-form>
-    <el-button size="large" :type="testButtonSuccess?'success':'primary'"
-               @click="handleTest"
-               style="width: 100%"
-               :loading="testButtonLoading"
-               :icon="testButtonSuccess?'Check':'Van'">
-      {{ testButtonSuccess ? '连接成功' : '测试连接' }}
-    </el-button>
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleSubmit">
+        <el-button size="large" @click="handleClose">取消</el-button>
+        <el-button size="large" type="success"
+                   @click="handleTest"
+                   :loading="testButtonLoading"
+                   :plain="!testButtonSuccess"
+                   :icon="testButtonSuccess ? 'Check':'Van'">
+          {{ testButtonSuccess ? '连接成功' : '测试连接' }}
+        </el-button>
+        <el-button type="primary" @click="handleSubmit" v-if="editable" size="large">
           提交
         </el-button>
       </div>
