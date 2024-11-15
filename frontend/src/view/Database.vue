@@ -1,42 +1,51 @@
 <script setup>
 import {onMounted, reactive} from 'vue'
 import {Page} from "../../wailsjs/go/openAPI/OpenAPI.js";
-import DatabaseConfigForm from "@/components/InfoForm.vue";
+import DatabaseConfigForm from "@/components/DatabaseConfigForm.vue";
+import {ElMessage} from "element-plus";
 
 const data = reactive({
   tableData: [],
   pageNum: 1,
   pageSize: 10,
+  total: 1,
   dialogVisible: false,
   editable: false,
   DatabaseConfig: {}
 })
 
 onMounted(() => {
-  Page(data.pageNum, data.pageSize).then(res => {
-    console.log(res)
-  })
-  data.tableData.push({
-    id: 1,
-    name: '数据库1',
-    host: 'localhost',
-    dbType: 'mysql',
-    port: '3306',
-    username: 'user',
-    password: '123',
-  })
+  flushTableData()
 })
 
-
+const flushTableData = () => {
+  Page(data.pageNum, data.pageSize).then(res => {
+    data.tableData = res.list
+    data.pageNum = res.pageNum
+    data.pageSize = res.pageSize
+    data.total = res.total
+  }).catch(err=> {
+    ElMessage({
+      message: '获取数据库列表失败',
+      type: 'error',
+      duration: 2000
+    })
+  })
+}
 const handleEdit = (row) => {
   data.DatabaseConfig = {...row}
   data.editable = true
+  data.dialogVisible = true
+}
+const handleSelect = (row) => {
+  data.DatabaseConfig = {...row}
   data.dialogVisible = true
 }
 const handleClose = () => {
   data.DatabaseConfig = {}
   data.editable = false
   data.dialogVisible = false
+  flushTableData()
 }
 </script>
 
@@ -56,6 +65,9 @@ const handleClose = () => {
             prop="name"
             label="数据库名称"
             width="200">
+          <template #default="scope">
+            <el-button type="primary" text @click="handleSelect(scope.row)" >{{ scope.row.name }}</el-button>
+          </template>
         </el-table-column>
         <el-table-column
             prop="dbType"
@@ -95,7 +107,7 @@ const handleClose = () => {
   </el-row>
   <br/>
   <el-row justify="end">
-    <el-pagination background layout="prev, pager, next" :total="1"/>
+    <el-pagination background layout="prev, pager, next" :total="data.total"/>
   </el-row>
 </template>
 

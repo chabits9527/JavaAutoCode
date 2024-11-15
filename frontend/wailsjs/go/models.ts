@@ -9,6 +9,7 @@ export namespace entity {
 	    username: string;
 	    password: string;
 	    database: string;
+	    params: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DatabaseConfig(source);
@@ -24,6 +25,7 @@ export namespace entity {
 	        this.username = source["username"];
 	        this.password = source["password"];
 	        this.database = source["database"];
+	        this.params = source["params"];
 	    }
 	}
 	export class PageInfo {

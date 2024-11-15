@@ -6,11 +6,13 @@ toolchain go1.22.4
 
 require (
 	github.com/glebarez/sqlite v1.11.0
+	github.com/go-sql-driver/mysql v1.8.1
 	github.com/wailsapp/wails/v2 v2.9.2
 	gorm.io/gorm v1.25.12
 )
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/glebarez/go-sqlite v1.22.0 // indirect

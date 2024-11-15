@@ -6,6 +6,10 @@ export function Page(arg1, arg2) {
   return window['go']['openAPI']['OpenAPI']['Page'](arg1, arg2);
 }
 
-export function Save(arg1) {
-  return window['go']['openAPI']['OpenAPI']['Save'](arg1);
+export function SaveDatabaseConfig(arg1) {
+  return window['go']['openAPI']['OpenAPI']['SaveDatabaseConfig'](arg1);
+}
+
+export function TestConnect(arg1) {
+  return window['go']['openAPI']['OpenAPI']['TestConnect'](arg1);
 }

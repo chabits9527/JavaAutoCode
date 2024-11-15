@@ -11,6 +11,7 @@ type DatabaseConfig struct {
 	Username string `gorm:"type:varchar(50);not null;" json:"username"`
 	Password string `gorm:"type:varchar(50);not null;" json:"password"`
 	Database string `gorm:"type:varchar(200);not null;" json:"database"`
+	Params   string `gorm:"type:varchar(500);not null;" json:"params"`
 }
 
 func init() {

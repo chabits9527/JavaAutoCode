@@ -4,4 +4,6 @@ import {entity} from '../models';
 
 export function Page(arg1:number,arg2:number):Promise<entity.PageInfo>;
 
-export function Save(arg1:entity.DatabaseConfig):Promise<void>;
+export function SaveDatabaseConfig(arg1:entity.DatabaseConfig):Promise<void>;
+
+export function TestConnect(arg1:entity.DatabaseConfig):Promise<boolean>;
